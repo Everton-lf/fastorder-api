@@ -18,7 +18,7 @@ def status():
 def soma():
     a = request.args.get('a', default=0, type=float)
     b = request.args.get('b', default=0, type=float)
-    resultado = a - b
+    resultado = a + b
     return jsonify({"resultado": resultado})
 
 
