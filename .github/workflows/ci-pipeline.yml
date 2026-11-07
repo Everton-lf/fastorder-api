@@ -1,6 +1,5 @@
 name: Esteira de Integracao Continua (CI)
 
-# Define QUANDO o pipeline vai rodar (a cada push ou pull request na branch main)
 on:
   push:
     branches:
@@ -9,14 +8,13 @@ on:
     branches:
       - main
 
-# Define as tarefas (Jobs)
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest # Runner efêmero fornecido pelo GitHub
+    runs-on: ubuntu-22.04 # Fixa a versão estável do Ubuntu que possui suporte nativo ao Python 3.9
 
     steps:
       - name: 1. Baixar o codigo fonte (Checkout)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 2. Configurar o ambiente Python
         uses: actions/setup-python@v5
