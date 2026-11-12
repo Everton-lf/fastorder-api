@@ -1,5 +1,8 @@
 # Usa uma imagem oficial do Python, bem leve
-FROM python:3.9-slim
+FROM python:3.12-slim
+
+# Atualiza pacotes do sistema operacional para mitigar CVEs da imagem base
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
@@ -8,7 +11,8 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Instala as dependências
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copia o resto do código da aplicação
 COPY . .
