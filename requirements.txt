@@ -3,3 +3,7 @@ flake8
 werkzeug
 pytest-flask
 pytest
+
+#Segundo estudo guiado
+bandit
+pip-audit

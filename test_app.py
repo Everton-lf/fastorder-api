@@ -1,8 +1,8 @@
 import pytest
 from app import app
+import app as app_module
 
 
-# Cria um cliente de teste falso para evitar subir o servidor real
 @pytest.fixture
 def client():
     app.config['TESTING'] = True
@@ -15,15 +15,26 @@ def test_home_status_code(client):
     assert resposta.status_code == 200
 
 
-def test_home_mensagem(client):
-    resposta = client.get('/')
+def test_soma_valida(client):
+    resposta = client.get('/api/soma?a=10&b=20')
     dados = resposta.get_json()
-    assert dados['mensagem'] == "Bem-vindo a API FastOrder!"
+    assert resposta.status_code == 200
+    assert dados['resultado'] == 30.0
 
 
-# Missão 6.1: Teste da rota /api/soma
-def test_soma(client):
-    resposta = client.get('/api/soma?a=10&b=5')
+# Teste 1: Garantir que a rota /api/desconto retorne 403 quando a Flag estiver desativada
+def test_desconto_desativado(client, monkeypatch):
+    monkeypatch.setattr(app_module, 'FEATURE_DESCONTO_PROMO', False)
+    resposta = client.get('/api/desconto?valor=100&porcentagem=15')
+    assert resposta.status_code == 403
+    dados = resposta.get_json()
+    assert dados['flag_status'] is False
+
+
+# Teste 2: Garantir que a rota /api/desconto funcione e retorne 200 quando a Flag estiver ativada
+def test_desconto_ativado(client, monkeypatch):
+    monkeypatch.setattr(app_module, 'FEATURE_DESCONTO_PROMO', True)
+    resposta = client.get('/api/desconto?valor=100&porcentagem=15')
     assert resposta.status_code == 200
     dados = resposta.get_json()
-    assert dados['resultado'] == 15
+    assert dados['valor_final'] == 85.0
