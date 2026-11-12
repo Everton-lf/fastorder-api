@@ -2,8 +2,12 @@ Flask
 flake8
 werkzeug
 pytest-flask
-pytest
+pytest>=9.0.3
 
-#Segundo estudo guiado
+#segundo estudo guiado
 bandit
 pip-audit
+msgpack>=1.2.3
+filelock>=4.2.1
+requests>=2.33.0
+urllib3>=2.8.0
